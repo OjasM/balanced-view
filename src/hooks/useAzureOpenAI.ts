@@ -169,6 +169,7 @@ Only include articles that are directly related to the specified topic.`;
           ],
           max_tokens: 2000,
           temperature: 0.3,
+          store: true,
         }),
       });
 
