@@ -57,25 +57,13 @@ async function fetchRSSFeed(url: string): Promise<string[]> {
     const items = xml.querySelectorAll('item');
     const articles: string[] = [];
     
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    
     items.forEach((item) => {
       const title = item.querySelector('title')?.textContent || '';
       const link = item.querySelector('link')?.textContent || '';
-      const pubDate = item.querySelector('pubDate')?.textContent;
-      
-      if (pubDate) {
-        const articleDate = new Date(pubDate);
-        if (articleDate >= oneWeekAgo) {
-          articles.push(`Title: ${title} | URL: ${link}`);
-        }
-      } else {
-        articles.push(`Title: ${title} | URL: ${link}`);
-      }
+      articles.push(`Title: ${title} | URL: ${link}`);
     });
     
-    return articles.slice(0, 10);
+    return articles;
   } catch (error) {
     console.error('Error fetching RSS:', error);
     return [];
