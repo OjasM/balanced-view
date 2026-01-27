@@ -28,6 +28,13 @@ interface AnalysisResult {
   };
 }
 
+export interface FeedLog {
+  perspective: string;
+  outlet: string;
+  articles: string[];
+  fetchedAt: string;
+}
+
 const RSS_FEEDS = {
   right: [
     { name: 'Swarajya', url: 'https://prod-qt-images.s3.amazonaws.com/production/swarajya/feed.xml' },
@@ -87,6 +94,7 @@ export function useAzureOpenAI() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [feedLogs, setFeedLogs] = useState<FeedLog[]>([]);
 
   const analyzeNews = async (topic: string) => {
     setIsLoading(true);
@@ -106,6 +114,16 @@ export function useAzureOpenAI() {
 
       // Fetch RSS feeds
       const feeds = await fetchAllFeeds();
+      
+      // Log the raw feed data before processing
+      const timestamp = new Date().toLocaleString();
+      const logs: FeedLog[] = feeds.map(({ perspective, outlet, articles }) => ({
+        perspective,
+        outlet,
+        articles,
+        fetchedAt: timestamp,
+      }));
+      setFeedLogs(logs);
       
       // Construct the feed summary for the AI
       let feedContent = '';
@@ -200,5 +218,5 @@ Only include articles that are directly related to the specified topic.`;
     }
   };
 
-  return { analyzeNews, isLoading, error, result };
+  return { analyzeNews, isLoading, error, result, feedLogs };
 }

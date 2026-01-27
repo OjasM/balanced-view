@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Settings, RefreshCw, Search, Newspaper } from 'lucide-react';
 import SettingsModal from '@/components/SettingsModal';
+import LogsModal from '@/components/LogsModal';
 import PerspectiveCard from '@/components/PerspectiveCard';
 import { useAzureOpenAI } from '@/hooks/useAzureOpenAI';
 
 const Index = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isLogsOpen, setIsLogsOpen] = useState(false);
   const [topic, setTopic] = useState('');
-  const { analyzeNews, isLoading, error, result } = useAzureOpenAI();
+  const { analyzeNews, isLoading, error, result, feedLogs } = useAzureOpenAI();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,7 +142,18 @@ const Index = () => {
       </main>
 
       {/* Settings Modal */}
-      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <SettingsModal 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+        onOpenLogs={() => setIsLogsOpen(true)}
+      />
+      
+      {/* Logs Modal */}
+      <LogsModal 
+        isOpen={isLogsOpen} 
+        onClose={() => setIsLogsOpen(false)} 
+        logs={feedLogs}
+      />
     </div>
   );
 };
