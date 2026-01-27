@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, FileText } from 'lucide-react';
 
 interface AzureSettings {
   apiKey: string;
@@ -11,9 +11,10 @@ interface AzureSettings {
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenLogs: () => void;
 }
 
-const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
+const SettingsModal = ({ isOpen, onClose, onOpenLogs }: SettingsModalProps) => {
   const [settings, setSettings] = useState<AzureSettings>({
     apiKey: '',
     endpoint: '',
@@ -48,9 +49,18 @@ const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
       <div className="relative w-full max-w-md bg-card border border-border rounded-2xl p-6 shadow-2xl">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-display font-bold text-foreground">Azure OpenAI Settings</h2>
-          <button onClick={onClose} className="btn-ghost">
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => { onClose(); onOpenLogs(); }} 
+              className="btn-ghost"
+              title="View RSS Feed Logs"
+            >
+              <FileText className="w-5 h-5" />
+            </button>
+            <button onClick={onClose} className="btn-ghost">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         <div className="space-y-4">
